@@ -1,0 +1,70 @@
+<form (ngSubmit)="submit()" [formGroup]="userForm" class="loading">
+    <ng-container *ngIf="deleteAction; else formLoading">
+      <p>Voulez vous vraiment supprimer le promoteur <strong>{{user.email}}</strong> ?</p>
+      <div class="button-ligne">
+        <button type="submit" mat-raised-button color="primary">{{this.action}}</button>
+        <button (click)="cancel()" mat-raised-button color="primary">Cancel</button>
+      </div>
+      
+    </ng-container>
+    <ng-template #formLoading>
+      <ng-container *ngIf="loading; else form">
+        <mat-spinner></mat-spinner>
+      </ng-container>
+      <ng-template #form>
+        <mat-form-field class="example-full-width">
+          <mat-label>Firstname</mat-label>
+          <ng-container>
+            <input matInput value="{{user.firstname}}" formControlName="firstname">
+          </ng-container>
+        </mat-form-field>
+        <mat-form-field class="example-full-width">
+            <mat-label>Lastname</mat-label>
+            <ng-container>
+              <input matInput value="{{user.lastname}}" formControlName="lastname">
+            </ng-container>
+          </mat-form-field>
+        <mat-form-field class="example-full-width">
+            <mat-label>Email</mat-label>
+            <ng-container>
+              <input matInput value="{{user.email}}" formControlName="email">
+            </ng-container>
+          </mat-form-field>
+          <mat-form-field class="example-full-width">
+            <mat-label>Password</mat-label>
+            <ng-container>
+              <input matInput type="password" value="{{user.password}}" formControlName="password">
+            </ng-container>
+          </mat-form-field>
+        <mat-form-field class="example-full-width">
+            <mat-label>Address</mat-label>
+            <ng-container>
+              <input matInput value="{{user.address}}" formControlName="address">
+            </ng-container>
+          </mat-form-field>
+          <mat-form-field class="example-full-width">
+            <mat-label>Phone Number</mat-label>
+            <ng-container>
+              <input matInput value="{{user.phone_number}}" formControlName="phoneNumber">
+            </ng-container>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Roles</mat-label>
+            <mat-select formControlName="roles">
+              <mat-option *ngFor="let role of roles" [value]="role.value">
+                {{role.viewValue}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        <div class="button-ligne">
+          <button type="submit" [disabled]="userForm.invalid" mat-raised-button color="primary">{{this.action}}</button>
+          <button (click)="cancel()" mat-raised-button color="primary">Cancel</button>
+        </div>
+        
+      </ng-template>
+    </ng-template>
+  </form>
+  <!-- <div *ngIf="userForm.get('name').hasError('required')">Name is required</div>
+  <div *ngIf="userForm.get('email').hasError('required')">Email is required</div>
+  <div *ngIf="userForm.get('address').hasError('required')">Address is required</div>
+  <div *ngIf="userForm.get('phoneNumber').hasError('required')">Phone Number is required</div> -->

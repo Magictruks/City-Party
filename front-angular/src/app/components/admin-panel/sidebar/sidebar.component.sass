@@ -1,0 +1,49 @@
+$text-color: rgba(255, 255, 255, 0.884)
+$background-nav-color: rgba(63, 81, 181, 0.918)
+  
+.example-container
+  display: flex
+  flex-direction: column
+  position: absolute
+  top: 0
+  bottom: 0
+  left: 0
+  right: 0
+
+.example-is-mobile .example-toolbar
+  position: fixed
+  z-index: 2
+
+
+h1.example-app-name 
+  margin-left: 8px
+
+
+.example-sidenav-container 
+  flex: 1
+
+
+.example-is-mobile .example-sidenav-container
+  flex: 1 0 auto
+
+.sidenav-content
+  padding: 50px
+
+.example-icon
+  padding: 0 14px
+
+
+.example-spacer
+  flex: 1 1 auto
+
+mat-sidenav
+  width: 190px
+  background-color: $background-nav-color
+  color: $text-color
+  padding-left: 10px
+
+mat-icon
+  color: $text-color
+
+span
+  color: $text-color

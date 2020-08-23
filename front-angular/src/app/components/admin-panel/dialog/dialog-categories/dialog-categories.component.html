@@ -1,0 +1,29 @@
+<form (ngSubmit)="submit()" [formGroup]="categoryForm" class="loading" autocomplete="off">
+  <ng-container *ngIf="deleteAction; else formLoading">
+    <p>Voulez vous vraiment supprimer la catégorie <strong>{{category.label}}</strong> ?</p>
+    <div class="button-ligne">
+      <button type="submit" [disabled]="categoryForm.invalid" mat-raised-button color="primary">{{this.action}}</button>
+      <button (click)="cancel()" mat-raised-button color="primary">Cancel</button>
+    </div>
+    
+  </ng-container>
+  <ng-template #formLoading>
+    <ng-container *ngIf="loading; else form">
+      <mat-spinner></mat-spinner>
+    </ng-container>
+    <ng-template #form>
+      <mat-form-field class="example-full-width">
+        <mat-label>label</mat-label>
+        <ng-container>
+          <input matInput value="{{category.label}}" formControlName="label">
+        </ng-container>
+      </mat-form-field>
+      <div class="button-ligne">
+        <button type="submit" [disabled]="categoryForm.invalid" mat-raised-button color="primary">{{this.action}}</button>
+        <button (click)="cancel()" mat-raised-button color="primary">Cancel</button>
+      </div>
+      
+    </ng-template>
+  </ng-template>
+</form>
+<div *ngIf="categoryForm.get('label').hasError('required')">Label is required</div>

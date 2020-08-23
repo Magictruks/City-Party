@@ -1,0 +1,34 @@
+<div class="example-container" [class.example-is-mobile]="mobileQuery.matches">
+    <mat-toolbar color="primary" class="example-toolbar">
+      <mat-toolbar-row>
+        <button mat-icon-button (click)="snav.toggle()"><mat-icon>menu</mat-icon></button>
+        <h1 class="example-app-name">City Party</h1>
+        <span class="example-spacer"></span>
+        <mat-icon class="example-icon" aria-hidden="false" aria-label="Example user verified icon">verified_user</mat-icon>
+        <span (click)="logout()">Logout</span>
+      </mat-toolbar-row>
+      
+    </mat-toolbar>
+
+  
+    <mat-sidenav-container class="example-sidenav-container"
+                           [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
+      <mat-sidenav opened="true" #snav [mode]="mobileQuery.matches ? 'over' : 'side'"
+                   [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
+        <mat-nav-list>
+            <div *ngFor="let sidebarnavItem of sidebarnavItems">
+                <h4 *ngIf="sidebarnavItem.extralink === true">{{sidebarnavItem.title}}</h4>
+                <a [routerLink]="sidebarnavItem.path" *ngIf="sidebarnavItem.extralink === false" mat-list-item routerLink=".">
+                    <mat-icon  aria-hidden = "false"  aria-label = "Exemple d'icône d'accueil" >{{sidebarnavItem.icon}}</mat-icon>
+                    <span class="nav-item-text">{{sidebarnavItem.title}}</span>
+                </a>
+            </div>
+            
+        </mat-nav-list>
+      </mat-sidenav>
+  
+      <mat-sidenav-content class="sidenav-content">
+        <router-outlet></router-outlet>
+      </mat-sidenav-content>
+    </mat-sidenav-container>
+  </div>

@@ -1,0 +1,60 @@
+<form (ngSubmit)="submit()" [formGroup]="eventForm" class="loading" autocomplete="off">
+    <ng-container *ngIf="deleteAction; else formLoading">
+      <p>Voulez vous vraiment supprimer le promoteur <strong>{{event.label}}</strong> ?</p>
+      <div class="button-ligne">
+        <button type="submit" mat-raised-button color="primary">{{this.action}}</button>
+        <button (click)="cancel()" mat-raised-button color="primary">Cancel</button>
+      </div>
+      
+    </ng-container>
+    <ng-template #formLoading>
+      <ng-container *ngIf="loading; else form">
+        <mat-spinner></mat-spinner>
+      </ng-container>
+      <ng-template #form>
+        <mat-form-field class="example-full-width">
+          <mat-label>Label</mat-label>
+          <ng-container>
+            <input matInput value="{{event.label}}" formControlName="label">
+          </ng-container>
+        </mat-form-field>
+        <mat-form-field class="example-full-width">
+            <mat-label>Address</mat-label>
+            <ng-container>
+              <input matInput ngx-google-places-autocomplete value="{{event.address}}" formControlName="address" [options]= 
+              'options'  (onAddressChange)="AddressChange($event)">
+            </ng-container>
+          </mat-form-field>
+        <mat-form-field class="example-full-width">
+            <mat-label>Content</mat-label>
+            <ng-container>
+              <textarea matInput formControlName="content">{{event.content}}</textarea>
+            </ng-container>
+          </mat-form-field>
+          <mat-form-field class="example-full-width">
+            <mat-label>Date début - fin</mat-label>
+            <ng-container>
+              <input matInput [owlDateTime]="dt1" [selectMode]="'range'" [owlDateTimeTrigger]="dt1" placeholder="Date Time" formControlName="dateBeginEndAt">
+              <owl-date-time #dt1></owl-date-time>
+            </ng-container>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Promoter</mat-label>
+            <mat-select formControlName="promoter">
+              <mat-option *ngFor="let promoter of promoters" [value]="promoter['@id']"> {{ promoter.firstname }} {{ promoter.lastname }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Categories</mat-label>
+            <mat-select formControlName="category" multiple>
+              <mat-option *ngFor="let category of categories" [value]="category['@id']">{{category.label}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        <div class="button-ligne">
+          <button type="submit" [disabled]="eventForm.invalid" mat-raised-button color="primary">{{this.action}}</button>
+          <button (click)="cancel()" mat-raised-button color="primary">Cancel</button>
+        </div>
+        
+      </ng-template>
+    </ng-template>
+  </form>

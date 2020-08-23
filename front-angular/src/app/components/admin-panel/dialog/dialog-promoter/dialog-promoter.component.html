@@ -1,0 +1,50 @@
+<form (ngSubmit)="submit()" [formGroup]="promoterForm" class="loading">
+    <ng-container *ngIf="deleteAction; else formLoading">
+      <p>Voulez vous vraiment supprimer le promoteur <strong>{{promoter.name}}</strong> ?</p>
+      <div class="button-ligne">
+        <button type="submit" [disabled]="promoterForm.invalid" mat-raised-button color="primary">{{this.action}}</button>
+        <button (click)="cancel()" mat-raised-button color="primary">Cancel</button>
+      </div>
+      
+    </ng-container>
+    <ng-template #formLoading>
+      <ng-container *ngIf="loading; else form">
+        <mat-spinner></mat-spinner>
+      </ng-container>
+      <ng-template #form>
+        <mat-form-field class="example-full-width">
+          <mat-label>Name</mat-label>
+          <ng-container>
+            <input matInput placeholder="Ex. Pizza" value="{{promoter.name}}" formControlName="name">
+          </ng-container>
+        </mat-form-field>
+        <mat-form-field class="example-full-width">
+            <mat-label>Email</mat-label>
+            <ng-container>
+              <input matInput placeholder="Ex. Pizza" value="{{promoter.email}}" formControlName="email">
+            </ng-container>
+          </mat-form-field>
+        <mat-form-field class="example-full-width">
+            <mat-label>Address</mat-label>
+            <ng-container>
+              <input matInput placeholder="Ex. Pizza" value="{{promoter.address}}" formControlName="address">
+            </ng-container>
+          </mat-form-field>
+          <mat-form-field class="example-full-width">
+            <mat-label>Phone Number</mat-label>
+            <ng-container>
+              <input matInput placeholder="Ex. Pizza" value="{{promoter.phoneNumber}}" formControlName="phoneNumber">
+            </ng-container>
+          </mat-form-field>
+        <div class="button-ligne">
+          <button type="submit" [disabled]="promoterForm.invalid" mat-raised-button color="primary">{{this.action}}</button>
+          <button (click)="cancel()" mat-raised-button color="primary">Cancel</button>
+        </div>
+        
+      </ng-template>
+    </ng-template>
+  </form>
+  <div *ngIf="promoterForm.get('name').hasError('required')">Name is required</div>
+  <div *ngIf="promoterForm.get('email').hasError('required')">Email is required</div>
+  <div *ngIf="promoterForm.get('address').hasError('required')">Address is required</div>
+  <div *ngIf="promoterForm.get('phoneNumber').hasError('required')">Phone Number is required</div>

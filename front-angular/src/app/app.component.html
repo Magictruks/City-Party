@@ -1,0 +1,15 @@
+<!-- <app-topbar></app-topbar>
+<mat-drawer-container class="example-container">
+  <mat-drawer class="menu" mode="side" opened>
+
+  </mat-drawer>
+  <mat-drawer-content>
+    <router-outlet></router-outlet>
+  </mat-drawer-content>
+</mat-drawer-container> -->
+<ng-container *ngIf="currentUser; else login">
+  <app-sidebar></app-sidebar>
+</ng-container>
+<ng-template #login>
+  <app-login></app-login>
+</ng-template>
