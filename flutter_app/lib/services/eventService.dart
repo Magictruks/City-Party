@@ -15,9 +15,19 @@ class EventService {
 
   Future<dynamic> getEventsByCategory(idCategory) async {
     NetworkHelper networkHelper =
-        NetworkHelper('$kApiUrl/api/categories/$idCategory/events');
+        NetworkHelper('$kApiUrl/api/categories/$idCategory/event');
     var eventData = await networkHelper.getData();
     return eventData;
+  }
+
+  Future<dynamic> getEventAndCategoryProximity(latitude, longitude) async {
+    NetworkHelper networkHelperEvent =
+        NetworkHelper('$kApiUrl/api/event/$latitude/$longitude');
+    NetworkHelper networkHelperCategory =
+        NetworkHelper('$kApiUrl/api/category/$latitude/$longitude');
+    var eventData = await networkHelperEvent.getData();
+    var categoryData = await networkHelperCategory.getData();
+    return {'category': categoryData, 'event': eventData};
   }
 
 //  Future<List<Event>> fetchEvents(http.Client client) async {

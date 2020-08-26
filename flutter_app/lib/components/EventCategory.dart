@@ -6,7 +6,7 @@ class EventCategory extends StatefulWidget {
   EventCategory({this.title, this.listEvent});
 
   final String title;
-  final List listEvent;
+  final listEvent;
 
   @override
   _EventCategory createState() => _EventCategory();

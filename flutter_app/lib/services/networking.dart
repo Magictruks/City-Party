@@ -8,6 +8,7 @@ class NetworkHelper {
 
   final String url;
   final _storage = FlutterSecureStorage();
+  bool oneErrorTry = false;
 
   Future getData() async {
     var token = await _storage.read(key: 'token');
@@ -17,11 +18,12 @@ class NetworkHelper {
     if (response.statusCode == 200) {
       String data = response.body;
       return jsonDecode(data);
-    } else if (response.statusCode == 401) {
+    } else if (response.statusCode == 403) {
       var refresh_token = await _storage.read(key: 'refresh_token');
       var token = await JwtService().refreshToken(refresh_token);
       await _storage.delete(key: 'token');
-      await _storage.write(key: 'token', value: token['token']);
+      await _storage.write(key: 'token', value: token['access_token']);
+      oneErrorTry = true;
       return this.getData();
     } else {
       print(response.statusCode);

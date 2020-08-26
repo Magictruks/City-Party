@@ -94,7 +94,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     print('user');
                     if (user != null) {
                       print('in user');
-                      await storage.write(key: 'token', value: user['token']);
+                      await storage.write(
+                          key: 'token', value: user['access_token']);
                       await storage.write(
                           key: 'refresh_token', value: user['refresh_token']);
                       String value = await storage.read(key: 'token');

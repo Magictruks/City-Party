@@ -6,6 +6,7 @@ import 'package:flutterapp/components/EventCard.dart';
 import 'package:flutterapp/components/RoundedButton.dart';
 import 'package:flutterapp/components/TopNavBar.dart';
 import 'package:flutterapp/screen/filtre_screen.dart';
+import 'package:flutterapp/services/eventService.dart';
 import 'package:flutterapp/utilities/item_nav.dart';
 
 class SearchScreen extends StatefulWidget {

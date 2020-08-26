@@ -6,6 +6,7 @@ import 'package:flutterapp/components/BottomNavBar.dart';
 import 'package:flutterapp/components/EventCategory.dart';
 import 'package:flutterapp/components/TopNavBar.dart';
 import 'package:flutterapp/services/categoryService.dart';
+import 'package:flutterapp/services/eventService.dart';
 import 'package:flutterapp/services/jwtService.dart';
 import 'package:flutterapp/utilities/item_nav.dart';
 import 'package:intl/intl.dart';
@@ -35,21 +36,19 @@ class _MyHomePageState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(DateFormat.Hm().format(new DateTime.now()));
-
     return FutureBuilder<dynamic>(
-      future: CategoryService().getCategories(),
+      future: EventService().getEventAndCategoryProximity(1, 2),
       builder: (context, AsyncSnapshot<dynamic> snapshot) {
         if (snapshot.hasData) {
           print(snapshot.data);
           return Scaffold(
             appBar: TopNavBar(title: widget.title),
             body: ListView.builder(
-              itemCount: snapshot.data['hydra:totalItems'],
+              itemCount: snapshot.data['category'].length,
               itemBuilder: (context, index) {
                 return EventCategory(
-                  listEvent: snapshot.data['hydra:member'][index]['events'],
-                  title: snapshot.data['hydra:member'][index]['label'],
+                  listEvent: snapshot.data['event'][index],
+                  title: snapshot.data['category'][index]['label'],
                 );
               },
             ),

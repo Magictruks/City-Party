@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ffi';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,11 @@ class _EventScreenState extends State<EventScreen> {
   String dateBeginFormat;
   String dateEndFormat;
   String dateDayFormat;
+  double latitude;
+  double longitude;
+  LatLng _center;
+  Set<Marker> _makers;
+  CameraPosition _kGooglePlex;
 
   initDate() {
     DateHelper dateHelper = DateHelper();
@@ -33,32 +39,46 @@ class _EventScreenState extends State<EventScreen> {
     this.dateEndFormat = dateHelper.endFormat(widget.event['date_end_at']);
   }
 
-  // Google Maps Variable
-  Completer<GoogleMapController> _controller = Completer();
-  static const LatLng _center = const LatLng(49.12906, 6.1571072);
-  final Set<Marker> _makers = {
-    Marker(
-      markerId: MarkerId(_center.toString()),
-      position: _center,
+  initLocation() {
+    this.latitude = widget.event['latitude'];
+    this.longitude = widget.event['longitude'];
+    this._center = LatLng(this.latitude, this.longitude);
+    this._makers = {
+      Marker(
+        markerId: MarkerId(_center.toString()),
+        position: _center,
 //      infoWindow: InfoWindow(title: 'test', snippet : 'test'),
-      icon: BitmapDescriptor.defaultMarker,
-    )
-  };
-  LatLng _lastMapPosition = _center;
-
-  _onCameraMove(CameraPosition position) {
-    _lastMapPosition = position.target;
+        icon: BitmapDescriptor.defaultMarker,
+      )
+    };
+    this._kGooglePlex = CameraPosition(
+      target: _center,
+      zoom: 14.4746,
+    );
   }
 
-  static final CameraPosition _kGooglePlex = CameraPosition(
-    target: _center,
-    zoom: 14.4746,
-  );
+  // Google Maps Variable
+  Completer<GoogleMapController> _controller = Completer();
+//  static const LatLng _center = const LatLng(this.latitude, this.longitude);
+//  final Set<Marker> _makers = {
+//    Marker(
+//      markerId: MarkerId(_center.toString()),
+//      position: _center,
+////      infoWindow: InfoWindow(title: 'test', snippet : 'test'),
+//      icon: BitmapDescriptor.defaultMarker,
+//    )
+//  };
+
+//  static final CameraPosition _kGooglePlex = CameraPosition(
+//    target: _center,
+//    zoom: 14.4746,
+//  );
 
   @override
   Widget build(BuildContext context) {
     print(widget.event);
     initDate();
+    initLocation();
     return Scaffold(
       backgroundColor: Color(0xFFeaeaea),
       body: CustomScrollView(
@@ -69,7 +89,7 @@ class _EventScreenState extends State<EventScreen> {
             pinned: true,
             snap: false,
             flexibleSpace: FlexibleSpaceBar(
-              title: Text(widget.event['label']),
+              title: Text("Nom de l'organisateur"),
               background: Image(
                 image: AssetImage(
                   'images/bar.jpg',
@@ -99,7 +119,7 @@ class _EventScreenState extends State<EventScreen> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        'Nom de la Catégorie',
+                        widget.event['label'],
                         style: TextStyle(
                           fontWeight: FontWeight.w900,
                         ),
@@ -131,10 +151,15 @@ class _EventScreenState extends State<EventScreen> {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            'Gratuit',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
+                          child: widget.event['price'] == 0
+                              ? Text(
+                                  'Gratuit',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                )
+                              : Text(
+                                  '${widget.event['price'].toStringAsFixed(2)} €',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
                         ),
                       ],
                     ),
@@ -175,7 +200,7 @@ class _EventScreenState extends State<EventScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       Container(
-                        width: MediaQuery.of(context).size.width * 0.3,
+                        width: MediaQuery.of(context).size.width * 0.4,
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
@@ -187,7 +212,7 @@ class _EventScreenState extends State<EventScreen> {
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                               SizedBox(height: 10.0),
-                              Text(widget.event['address']),
+                              Expanded(child: Text(widget.event['address'])),
                             ],
                           ),
                         ),
@@ -199,7 +224,6 @@ class _EventScreenState extends State<EventScreen> {
                           onMapCreated: (GoogleMapController controller) {
                             _controller.complete(controller);
                           },
-                          onCameraMove: _onCameraMove,
                           markers: _makers,
                         ),
                       ),
