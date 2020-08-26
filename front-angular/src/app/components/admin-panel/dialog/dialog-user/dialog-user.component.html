@@ -39,15 +39,22 @@
         <mat-form-field class="example-full-width">
             <mat-label>Address</mat-label>
             <ng-container>
-              <input matInput value="{{user.address}}" formControlName="address">
+              <input 
+                matInput 
+                value="{{user.address}}" 
+                formControlName="address"
+                matGoogleMapsAutocomplete
+                country="fr"
+                (onAutocompleteSelected)="onAutocompleteSelected($event)"
+                (onLocationSelected)="onLocationSelected($event)">
             </ng-container>
           </mat-form-field>
-          <mat-form-field class="example-full-width">
+          <!-- <mat-form-field class="example-full-width">
             <mat-label>Phone Number</mat-label>
             <ng-container>
               <input matInput value="{{user.phone_number}}" formControlName="phoneNumber">
             </ng-container>
-          </mat-form-field>
+          </mat-form-field> -->
           <mat-form-field>
             <mat-label>Roles</mat-label>
             <mat-select formControlName="roles">

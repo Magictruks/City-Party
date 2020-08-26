@@ -8,6 +8,7 @@ import { DialogCategoriesComponent } from '../dialog/dialog-categories/dialog-ca
 import { map } from 'rxjs/operators';
 import { MatTableDataSource } from '@angular/material/table';
 import { JwtService } from 'src/app/services/jwt.service';
+import { Token } from 'src/app/models/token.model';
 
 
 @Component({
@@ -47,9 +48,10 @@ export class CategoriesComponent implements OnInit {
   }
 
   refresh() {
-    this.ressourceService.getAll('categories')
-    .pipe(map(data => data['hydra:member'] as Categories[]))
+    this.ressourceService.getAll('category')
+    .pipe(map(data => data as Categories[]))
     .subscribe(data => {
+      console.log(data)
       console.log(this.sort)
       console.log(this.paginator)
 
@@ -61,13 +63,13 @@ export class CategoriesComponent implements OnInit {
     error => {
       console.log('ici lerreur ' + error)
       console.log(error.status)
-      if(error.status === 401) {
+      if(error.status === 403) {
         this.jwtService.jwtRefresh()
+        .pipe(map(data => data as Token))
         .subscribe(res => {
-          console.log(res['token'])
-          localStorage.setItem('currentUser', JSON.stringify(res['token']))
-          this.refresh()
-        }, error => console.log(error)
+            localStorage.setItem('currentUser', JSON.stringify(res.access_token))
+            this.refresh()
+          }, error => console.log(error)
         )
       }
     })

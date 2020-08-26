@@ -1,4 +1,8 @@
-<form (ngSubmit)="submit()" [formGroup]="eventForm" class="loading" autocomplete="off">
+<ng-container *ngIf="!loadingStart; else form">
+  <mat-spinner></mat-spinner>
+</ng-container>
+<ng-template #form>
+  <form (ngSubmit)="submit()" [formGroup]="eventForm" class="loading" autocomplete="off">
     <ng-container *ngIf="deleteAction; else formLoading">
       <p>Voulez vous vraiment supprimer le promoteur <strong>{{event.label}}</strong> ?</p>
       <div class="button-ligne">
@@ -21,8 +25,16 @@
         <mat-form-field class="example-full-width">
             <mat-label>Address</mat-label>
             <ng-container>
-              <input matInput ngx-google-places-autocomplete value="{{event.address}}" formControlName="address" [options]= 
-              'options'  (onAddressChange)="AddressChange($event)">
+              <!-- <input matInput ngx-google-places-autocomplete value="{{event.address}}" formControlName="address" [options]= 
+              'options'  (onAddressChange)="AddressChange($event)"> -->
+              <mat-label>Address</mat-label>
+              <input matInput
+                  formControlName="address"
+                  value="{{event.address}}"
+                  matGoogleMapsAutocomplete
+                  country="fr"
+                  (onAutocompleteSelected)="onAutocompleteSelected($event)"
+                  (onLocationSelected)="onLocationSelected($event)">
             </ng-container>
           </mat-form-field>
         <mat-form-field class="example-full-width">
@@ -40,15 +52,21 @@
           </mat-form-field>
           <mat-form-field>
             <mat-label>Promoter</mat-label>
-            <mat-select formControlName="promoter">
-              <mat-option *ngFor="let promoter of promoters" [value]="promoter['@id']"> {{ promoter.firstname }} {{ promoter.lastname }}</mat-option>
+            <mat-select formControlName="user_id">
+              <mat-option *ngFor="let promoter of promoters" [value]="promoter['id']"> {{ promoter.firstname }} {{ promoter.lastname }}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field>
             <mat-label>Categories</mat-label>
             <mat-select formControlName="category" multiple>
-              <mat-option *ngFor="let category of categories" [value]="category['@id']">{{category.label}}</mat-option>
+              <mat-option *ngFor="let category of categories" [value]="category['id']">{{category.label}}</mat-option>
             </mat-select>
+          </mat-form-field>
+          <mat-form-field class="example-full-width">
+            <mat-label>Price</mat-label>
+            <ng-container>
+              <input matInput type="number" value="{{event.label}}" formControlName="price">
+            </ng-container>
           </mat-form-field>
         <div class="button-ligne">
           <button type="submit" [disabled]="eventForm.invalid" mat-raised-button color="primary">{{this.action}}</button>
@@ -58,3 +76,4 @@
       </ng-template>
     </ng-template>
   </form>
+</ng-template>

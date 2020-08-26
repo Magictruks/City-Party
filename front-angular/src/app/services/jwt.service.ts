@@ -17,6 +17,8 @@ export class JwtService {
 
   jwtRefresh() {
     const params = {refresh_token: JSON.parse(localStorage.getItem('refresh_token'))}
+    console.log(params)
     return this.httpClient.post(environment.configUrl + "refresh_token", params)
   }
+
 }

@@ -19,6 +19,8 @@ import { UsersComponent } from './components/admin-panel/users/users.component';
 import { DialogUserComponent } from './components/admin-panel/dialog/dialog-user/dialog-user.component';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { GooglePlaceModule } from "ngx-google-places-autocomplete";
+import { MatGoogleMapsAutocompleteModule } from '@angular-material-extensions/google-maps-autocomplete';
+import { AgmCoreModule } from '@agm/core';
 
 @NgModule({
   declarations: [
@@ -43,7 +45,12 @@ import { GooglePlaceModule } from "ngx-google-places-autocomplete";
     FlexLayoutModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
-    GooglePlaceModule
+    GooglePlaceModule,
+    MatGoogleMapsAutocompleteModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyBm1LS0mpOR_SQtckisOSnnlSALtCBayTo',
+      libraries: ['places']
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]

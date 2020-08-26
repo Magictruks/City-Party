@@ -8,6 +8,7 @@ import { map } from 'rxjs/operators';
 import { DialogUserComponent } from '../dialog/dialog-user/dialog-user.component';
 import { User } from 'src/app/models/user.model';
 import { JwtService } from 'src/app/services/jwt.service';
+import { Token } from 'src/app/models/token.model';
 
 @Component({
   selector: 'app-users',
@@ -18,7 +19,7 @@ import { JwtService } from 'src/app/services/jwt.service';
 export class UsersComponent implements OnInit {
 
   element_data: User[];
-  displayedColumns: string[] = ['id', 'firstname', 'lastname', 'email', 'address', 'phone_number', 'roles', 'created_at', 'action'];
+  displayedColumns: string[] = ['id', 'firstname', 'lastname', 'email', 'address', 'roles', 'created_at', 'action'];
   data = new MatTableDataSource<User>();
   sort: any
   paginator: any
@@ -51,8 +52,8 @@ export class UsersComponent implements OnInit {
   }
 
   refresh() {
-    this.ressourceService.getAll('users')
-    .pipe(map(data => data['hydra:member'] as User[]))
+    this.ressourceService.getAll('user')
+    .pipe(map(data => data as User[]))
     .subscribe(data => {
       console.log(data)
       this.data = new MatTableDataSource<User>(data);
@@ -63,13 +64,13 @@ export class UsersComponent implements OnInit {
     error => {
       console.log('ici lerreur ' + error)
       console.log(error.status)
-      if(error.status === 401) {
+      if(error.status === 403) {
         this.jwtService.jwtRefresh()
+        .pipe(map(data => data as Token))
         .subscribe(res => {
-          console.log(res['token'])
-          localStorage.setItem('currentUser', JSON.stringify(res['token']))
-          this.refresh()
-        }, error => console.log(error)
+            localStorage.setItem('currentUser', JSON.stringify(res.access_token))
+            this.refresh()
+          }, error => console.log(error)
         )
       }
     })
@@ -113,7 +114,6 @@ export class UsersComponent implements OnInit {
       firstname:row_obj.firstname,
       lastname:row_obj.lastname,
       address: row_obj.address,
-      phone_number: row_obj.phoneNumber,
       email: row_obj.email,
       roles: row_obj.roles,
       created_at: row_obj.created_at
@@ -126,13 +126,12 @@ export class UsersComponent implements OnInit {
   updateRowData(row_obj){
     this.data.data = this.data.data.filter((value,key)=>{
       if(value.id == row_obj.id){
+        console.log('ok')
         value.firstname = row_obj.firstname,
         value.lastname = row_obj.lastname,
         value.address = row_obj.address,
-        value.phone_number = row_obj.phoneNumber,
         value.email = row_obj.email,
-        value.roles = row_obj.roles,
-        value.created_at = row_obj.created_at
+        value.roles = row_obj.roles
       }
       return true;
     });

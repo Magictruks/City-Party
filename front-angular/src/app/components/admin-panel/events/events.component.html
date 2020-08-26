@@ -34,17 +34,29 @@
 
     <ng-container matColumnDef="date_begin_at">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> date_begin_at </th>
-        <td mat-cell *matCellDef="let row"> {{row.dateBeginAt | date:'medium'}} </td>
+        <td mat-cell *matCellDef="let row"> {{row.date_begin_at | date:'medium'}} </td>
     </ng-container>
 
     <ng-container matColumnDef="date_end_at">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> date_end_at </th>
-        <td mat-cell *matCellDef="let row"> {{row.dateEndAt | date:'medium'}} </td>
+        <td mat-cell *matCellDef="let row"> {{row.date_end_at | date:'medium'}} </td>
     </ng-container>
+
+    <ng-container matColumnDef="price">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> price </th>
+      <td mat-cell *matCellDef="let row">
+        <ng-container *ngIf="row.price === 0; else price">
+          Gratuit
+        </ng-container>
+        <ng-template #price>
+          {{row.price.toFixed(2)}} €
+        </ng-template>
+      </td>
+  </ng-container>
 
     <ng-container matColumnDef="created_at">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Created </th>
-        <td mat-cell *matCellDef="let row"> {{row.createdAt | date}} </td>
+        <td mat-cell *matCellDef="let row"> {{row.created_at | date}} </td>
     </ng-container>
 
     <ng-container matColumnDef="action">

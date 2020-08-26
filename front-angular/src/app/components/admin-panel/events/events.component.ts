@@ -9,6 +9,7 @@ import { map } from 'rxjs/operators';
 import { EventModel } from 'src/app/models/events.model'
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import { JwtService } from 'src/app/services/jwt.service';
+import { Token } from 'src/app/models/token.model';
 
 @Component({
   selector: 'app-events',
@@ -25,7 +26,7 @@ import { JwtService } from 'src/app/services/jwt.service';
 export class EventsComponent implements OnInit {
 
   element_data: EventModel[];
-  displayedColumns: string[] = ['id', 'label', 'address', 'date_begin_at', 'date_end_at', 'created_at', 'action'];
+  displayedColumns: string[] = ['id', 'label', 'address', 'date_begin_at', 'date_end_at', 'price', 'created_at', 'action'];
   expandedElement: EventModel | null;
   data = new MatTableDataSource<EventModel>();
   sort: any
@@ -55,8 +56,8 @@ export class EventsComponent implements OnInit {
   }
 
   refresh() {
-    this.ressourceService.getAll('events')
-    .pipe(map(data => data['hydra:member'] as EventModel[]))
+    this.ressourceService.getAll('event')
+    .pipe(map(data => data as EventModel[]))
     .subscribe(data => {
       console.log(data)
       this.data = new MatTableDataSource<EventModel>(data);
@@ -67,13 +68,13 @@ export class EventsComponent implements OnInit {
     error => {
       console.log('ici lerreur ' + error)
       console.log(error.status)
-      if(error.status === 401) {
+      if(error.status === 403) {
         this.jwtService.jwtRefresh()
+        .pipe(map(data => data as Token))
         .subscribe(res => {
-          console.log(res['token'])
-          localStorage.setItem('currentUser', JSON.stringify(res['token']))
-          this.refresh()
-        }, error => console.log(error)
+            localStorage.setItem('currentUser', JSON.stringify(res.access_token))
+            this.refresh()
+          }, error => console.log(error)
         )
       }
     })
@@ -90,12 +91,13 @@ export class EventsComponent implements OnInit {
 
   openDialog(action, element) {
 
-    element.action = action
-    console.log(element.action)
+    // element.action = action
+    // console.log(element.action)
+    console.log(element)
 
     const dialogRef = this.dialog.open(DialogEventComponent, {
-      width: '250px',
-      data: {data: element}
+      width: '500px',
+      data: {data: element, action: action, id: element.id}
     });
 
     dialogRef.afterClosed().subscribe(res => {
@@ -114,13 +116,14 @@ export class EventsComponent implements OnInit {
   addRowData(row_obj){
     this.data.data.push({
       id:row_obj.id,
-      promoter:row_obj.promoter,
+      // promoter:row_obj.promoter,
       address:row_obj.address,
       label: row_obj.label,
       content: row_obj.content,
-      dateBeginAt: row_obj.dateBeginAt,
-      dateEndAt: row_obj.dateEndAt,
-      createdAt: row_obj.createdAt
+      date_begin_at: row_obj.date_begin_at,
+      date_end_at: row_obj.date_end_at,
+      price: row_obj.price,
+      created_at: row_obj.created_at
     });
     this.data.data = this.data.data.filter((value, key)=>{
       return true
@@ -128,15 +131,18 @@ export class EventsComponent implements OnInit {
     
   }
   updateRowData(row_obj){
+    console.log('ici row objet')
+    console.log(row_obj)
     this.data.data = this.data.data.filter((value,key)=>{
       if(value.id == row_obj.id){
         value.promoter = row_obj.promoter,
         value.address = row_obj.address,
         value.label = row_obj.label,
         value.content = row_obj.content,
-        value.dateBeginAt = row_obj.dateBeginAt,
-        value.dateEndAt = row_obj.dateEndAt,
-        value.createdAt = row_obj.createdAt
+        value.date_begin_at = row_obj.date_begin_at,
+        value.date_end_at = row_obj.date_end_at,
+        value.price = row_obj.price,
+        value.created_at = row_obj.created_at
       }
       return true;
     });

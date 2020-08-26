@@ -56,7 +56,7 @@ export class DialogCategoriesComponent implements OnInit {
   add() {
     this.categoryForm.value.events = []
     this.loading = true
-    this.ressourceService.post('categories', this.categoryForm.value).subscribe(res => {
+    this.ressourceService.post('category', this.categoryForm.value).subscribe(res => {
       console.log(res)
       this.dialogRef.close({event: this.action, data: res})
       this.loading = false
@@ -67,7 +67,7 @@ export class DialogCategoriesComponent implements OnInit {
   edit() {
     console.log(this.categoryForm.value)
     this.loading = true
-    this.ressourceService.edit('categories', this.category.id, this.categoryForm.value).subscribe(res => {
+    this.ressourceService.edit('category', this.category.id, this.categoryForm.value).subscribe(res => {
       this.dialogRef.close({event: this.action, data: res})
       this.loading = false
     })
@@ -76,7 +76,7 @@ export class DialogCategoriesComponent implements OnInit {
   delete() {
     this.deleteAction = false
     this.loading = true
-    this.ressourceService.delete('categories', this.category.id).subscribe(res => {
+    this.ressourceService.delete('category', this.category.id).subscribe(res => {
       this.dialogRef.close({event: this.action, data: this.category.id})
       this.loading = false
     })

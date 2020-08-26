@@ -6,10 +6,6 @@ const header = {
   'Authorization' : 'Bearer ' + JSON.parse(localStorage.getItem('currentUser'))
 }
 
-const requestOptions = {
-  headers: new Headers(header),
-}
-
 @Injectable({
   providedIn: 'root'
 })
