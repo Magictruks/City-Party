@@ -7,6 +7,12 @@ const eventCtrl = require('../controllers/event');
 
 router.get('/category/:id', authService.authenticateToken, eventCtrl.getByEventCategory)
 
+router.get('/favourite-and-participate/:event_id', authService.authenticateToken, eventCtrl.getFavoriteAndParticipate)
+router.get('/favorite', authService.authenticateToken, eventCtrl.getFavorite)
+router.post('/favorite/:event_id', authService.authenticateToken, eventCtrl.setFavorite)
+router.post('/participate/:event_id', authService.authenticateToken, eventCtrl.setParticipate)
+
+
 router.get('/', authService.authenticateToken, eventCtrl.get);
 router.post('/', authService.authenticateTokenAdmin, eventCtrl.post);
 router.get('/:id', authService.authenticateToken, eventCtrl.getByEventCategory);

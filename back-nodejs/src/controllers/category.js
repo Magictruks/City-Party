@@ -31,6 +31,7 @@ exports.getByProximity = async(req,res) => {
             console.log(req.params.latitude)
             console.log(req.params.longitude)
             result.unshift({id: -1, label: 'A proximité'})
+            result.push({id: -2, label: 'Favoris'})
             console.log(result)
             return res.send(result)
         })

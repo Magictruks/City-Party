@@ -3,7 +3,7 @@ const mysql = require('mysql');
 
 const Auth = {
     login: (email, callback) => {
-        const sql = "SELECT id, email, password, roles, firstname, lastname FROM user WHERE email = " + mysql.escape(email)
+        const sql = "SELECT id, email, password, roles, firstname, lastname, address, latitude, longitude FROM user WHERE email = " + mysql.escape(email)
         sqlService.get(sql, callback)
     },
 

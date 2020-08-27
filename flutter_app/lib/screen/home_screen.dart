@@ -32,6 +32,14 @@ class _MyHomePageState extends State<HomeScreen> {
 //    print(await _storage.read(key: 'token'));
     var token = await _storage.read(key: 'token');
     var tokenDecode = JwtService().decodeToken(token);
+    print(tokenDecode);
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    readToken();
   }
 
   @override
@@ -41,6 +49,7 @@ class _MyHomePageState extends State<HomeScreen> {
       builder: (context, AsyncSnapshot<dynamic> snapshot) {
         if (snapshot.hasData) {
           print(snapshot.data);
+          print(snapshot.data['category'].length);
           return Scaffold(
             appBar: TopNavBar(title: widget.title),
             body: ListView.builder(

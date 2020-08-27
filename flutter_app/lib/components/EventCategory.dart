@@ -15,6 +15,7 @@ class EventCategory extends StatefulWidget {
 class _EventCategory extends State<EventCategory> {
   @override
   Widget build(BuildContext context) {
+    print(widget.listEvent.length);
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Column(
@@ -27,7 +28,8 @@ class _EventCategory extends State<EventCategory> {
               style: kTextCategoryStyle,
             ),
           ),
-          SingleChildScrollView(
+          if (widget.listEvent.length > 0)
+            SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: <Widget>[
@@ -40,7 +42,13 @@ class _EventCategory extends State<EventCategory> {
                       dateEnd: event['date_end_at'],
                     )
                 ],
-              )),
+              ),
+            ),
+          if (widget.listEvent.length == 0)
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Text("Vous n'avez pas encore de favoris"),
+            ),
         ],
       ),
     );

@@ -4,6 +4,7 @@ import 'dart:ffi';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterapp/helper/date_helper.dart';
+import 'package:flutterapp/services/eventService.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:flutterapp/components/EventCard.dart';
@@ -27,9 +28,21 @@ class _EventScreenState extends State<EventScreen> {
   String dateDayFormat;
   double latitude;
   double longitude;
+  bool fav = false;
+  bool participate = false;
   LatLng _center;
   Set<Marker> _makers;
   CameraPosition _kGooglePlex;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print('init');
+    this.initLocation();
+    this.initDate();
+    this.initFavAndPart();
+  }
 
   initDate() {
     DateHelper dateHelper = DateHelper();
@@ -57,6 +70,28 @@ class _EventScreenState extends State<EventScreen> {
     );
   }
 
+  initFavAndPart() {
+    EventService()
+        .getFavoriteAndParticipate(this.widget.event['event_id'])
+        .then((value) {
+      print(value);
+      setState(() {
+        value['favorite'] == 0 ? this.fav = false : this.fav = true;
+        value['participate'] == 0
+            ? this.participate = false
+            : this.participate = true;
+      });
+    });
+  }
+
+  haveParticipate() {
+    if (this.widget.event['price'] == 0) {
+      return this.participate == false ? 'Participer' : 'Je participe déjà';
+    } else {
+      return this.participate == false ? 'Réserver' : 'J\'ai déjà ma place';
+    }
+  }
+
   // Google Maps Variable
   Completer<GoogleMapController> _controller = Completer();
 //  static const LatLng _center = const LatLng(this.latitude, this.longitude);
@@ -76,9 +111,7 @@ class _EventScreenState extends State<EventScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.event);
-    initDate();
-    initLocation();
+    print(this.widget.event);
     return Scaffold(
       backgroundColor: Color(0xFFeaeaea),
       body: CustomScrollView(
@@ -89,7 +122,8 @@ class _EventScreenState extends State<EventScreen> {
             pinned: true,
             snap: false,
             flexibleSpace: FlexibleSpaceBar(
-              title: Text("Nom de l'organisateur"),
+              title: Text(
+                  "${this.widget.event['firstname']} ${this.widget.event['lastname']}"),
               background: Image(
                 image: AssetImage(
                   'images/bar.jpg',
@@ -100,10 +134,18 @@ class _EventScreenState extends State<EventScreen> {
             ),
             actions: <Widget>[
               IconButton(
-                icon: Icon(Icons.favorite_border),
+                icon: this.fav
+                    ? Icon(Icons.favorite)
+                    : Icon(Icons.favorite_border),
                 color: Colors.white,
                 disabledColor: Colors.white,
-              )
+                onPressed: () {
+                  EventService().setFavorite(this.widget.event['event_id']);
+                  setState(() {
+                    this.fav = !this.fav;
+                  });
+                },
+              ),
             ],
           ),
           SliverList(
@@ -287,9 +329,14 @@ class _EventScreenState extends State<EventScreen> {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: FormRoundedButton(
-            text: 'Participer',
-            color: primary,
-            onPress: () => print('test'),
+            text: haveParticipate(),
+            color: this.participate == false ? primary : primaryDark,
+            onPress: () {
+              EventService().setParticipate(this.widget.event['event_id']);
+              setState(() {
+                this.participate = !this.participate;
+              });
+            },
           ),
         ),
       ),

@@ -19,7 +19,8 @@ const Event = {
 
     getByProximity: (latitude, longitude, callback) => {
         // Manque le where
-        const sql = "SELECT * FROM event_category INNER JOIN category ON category.id = event_category.category_id INNER JOIN event ON event.id = event_category.event_id"
+        // const params = [event_category.event_id, event_category.category_id, category.label, event.id, event.label, event.content, event.address, event.latitude, event.longitude, event.price, event.date_begin_at, event.date_end_at, event.created_at, event.user_id, event.image_id, user.firstname, user.lastname]
+        const sql = "SELECT event_category.event_id, event_category.category_id, category.label, event.id, event.label, event.content, event.address, event.latitude, event.longitude, event.price, event.date_begin_at, event.date_end_at, event.created_at, event.user_id, event.image_id, user.firstname, user.lastname FROM event_category INNER JOIN category ON category.id = event_category.category_id INNER JOIN event ON event.id = event_category.event_id INNER JOIN user ON user.id = event.user_id"
         sqlService.get(sql, callback)
     },
 

@@ -94,11 +94,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     print('user');
                     if (user != null) {
                       print('in user');
-                      await storage.write(
+                      await _storage.write(
                           key: 'token', value: user['access_token']);
-                      await storage.write(
+                      await _storage.write(
                           key: 'refresh_token', value: user['refresh_token']);
-                      String value = await storage.read(key: 'token');
+                      String value = await _storage.read(key: 'token');
                       setState(() {
                         Navigator.pushNamedAndRemoveUntil(
                             context, HomeScreen.id, ModalRoute.withName('/'));

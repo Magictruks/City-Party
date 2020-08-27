@@ -33,8 +33,8 @@ var con = initializeConnection({
     database: "city_party_nodejs",
   });
 
-exports.getById = (sql, id, callback) => {
-    con.query(sql, [id], (err, result) => {
+exports.getById = (sql, data, callback) => {
+    con.query(sql, data, (err, result) => {
         if(err) throw err;
         return callback(null, result);
     })

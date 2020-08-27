@@ -19,49 +19,58 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   AnimationController controller;
   Animation animation;
 
-  final _storage = FlutterSecureStorage();
+//  final _storage = FlutterSecureStorage();
+//
+//  void readToken() async {
+////    print(await _storage.read(key: 'token'));
+//    var token = await _storage.read(key: 'token');
+//    if (token != null) {
+//      var tokenDecode = JwtService().decodeToken(token);
+//      print(tokenDecode);
+//    } else {
+//      print('pas de token');
+//    }
+//  }
+//
+//  Future<bool> isAuth() async {
+//    var token = await _storage.read(key: 'token');
+//    // ignore: unnecessary_statements
+//    return token != null ? true : false;
+//  }
 
-  void readToken() async {
-//    print(await _storage.read(key: 'token'));
-    var token = await _storage.read(key: 'token');
-    if (token != null) {
-      var tokenDecode = JwtService().decodeToken(token);
-      print(tokenDecode);
-    } else {
-      print('pas de token');
-    }
-  }
-
-  Future<bool> isAuth() async {
-    var token = await _storage.read(key: 'token');
-    // ignore: unnecessary_statements
-    return token != null ? true : false;
-  }
+//  @override
+//  void initState() {
+//    // TODO: implement initState
+//    super.initState();
+//    readToken();
+//    var auth = isAuth();
+//    print('auth');
+//    print(auth);
+//    auth.then((value) {
+//      if (value) {
+//        Navigator.pushNamedAndRemoveUntil(
+//            context, HomeScreen.id, (route) => false);
+//      } else {
+//        controller =
+//            AnimationController(duration: Duration(seconds: 1), vsync: this);
+//        controller.forward();
+//        controller.addListener(() {
+//          setState(() {});
+//        });
+//      }
+//    });
+//  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    readToken();
-    var auth = isAuth();
-    print('auth');
-    print(auth);
-    auth.then((value) => {
-          if (value)
-            {
-              Navigator.pushNamedAndRemoveUntil(
-                  context, HomeScreen.id, (route) => false)
-            }
-          else
-            {
-              controller = AnimationController(
-                  duration: Duration(seconds: 1), vsync: this),
-              controller.forward(),
-              controller.addListener(() {
-                setState(() {});
-              })
-            }
-        });
+    controller =
+        AnimationController(duration: Duration(seconds: 1), vsync: this);
+    controller.forward();
+    controller.addListener(() {
+      setState(() {});
+    });
   }
 
   @override
