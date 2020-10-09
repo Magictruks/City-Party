@@ -1,2 +1,2 @@
-# city_party_v1
+# city_party
 Projet de stage
